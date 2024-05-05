@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.accounts.gql</groupId>
-	<artifactId>springboot-graphql-dgs</artifactId>
+	<artifactId>SpringBootGraphQL</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>springboot-graphql-dgs</name>
+	<name>SpringBootGraphQL</name>
 	<description>Demo project for Spring Boot GraphQL</description>
 
 	<properties>

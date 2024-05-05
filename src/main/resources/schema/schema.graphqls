@@ -1,41 +1,18 @@
 scalar DateTime
 scalar PositiveFloat
-scalar Currency
 scalar PositiveInt
 
 type Query {
-    getAccounts: [Account]
+    getTransactions : [Transaction]
 }
 
 type Mutation {
-    addAccount(account: AccountInput!): Boolean
+    addTransaction(transaction: TransactionInput!): Boolean
 }
 
 type Account {
-    accountId: ID!
-    accountType: AccountType!
-    accountNumber: String!
-    status: AccountStatus!
-    interestRate: PositiveFloat
-    interestRateType: InterestRateType
-    currency: Currency
-    currentBalance: PositiveFloat!
-    lastActivityDate: DateTime
+    accountId: ID!  @external
 }
-
-input AccountInput {
-    accountId: ID!
-    accountType: AccountType!
-    accountNumber: String!
-    status: AccountStatus!
-    interestRate: PositiveFloat
-    interestRateType: InterestRateType
-    currency: Currency
-    lastActivityDate: DateTime
-    currentBalance: PositiveFloat!
-    maturityDate: DateTime
-}
-
 
 type Transaction {
     transactionId: ID!
@@ -63,22 +40,6 @@ input TransactionInput {
 
 
 # Define all enum types here.
-enum AccountType {
-    CD
-    CHECKING
-    CREDITCARD
-    LOAN
-    MORTGAGE
-}
-
-enum AccountStatus {
-    OPEN
-    CLOSED
-    PENDINGOPEN
-    PENDINGCLOSE
-    DELINQUENT
-}
-
 enum InterestRateType {
     FIXED
     VARIABLE

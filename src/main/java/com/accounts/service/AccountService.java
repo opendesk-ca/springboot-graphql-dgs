@@ -33,7 +33,7 @@ public class AccountService {
         if (optionalAccount.isPresent()) {
             return optionalAccount.get();
         } else {
-            throw new AccountNotFoundException("Account Not fount " + accountId + " Please Account before adding Transactions");
+            throw new AccountNotFoundException("Account Not found " + accountId + " Please add Account before adding Transactions");
         }
     }
 

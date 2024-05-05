@@ -13,13 +13,13 @@ public class GraphQLConfig {
     }
 
     @Bean
-    public RuntimeWiringConfigurer PositiveFloatConfigurer() {
-        return wiringBuilder -> wiringBuilder.scalar(ExtendedScalars.PositiveFloat);
+    public RuntimeWiringConfigurer CountryCodeConfigurer() {
+        return wiringBuilder -> wiringBuilder.scalar(ExtendedScalars.CountryCode);
     }
 
     @Bean
-    public RuntimeWiringConfigurer CurrencyConfigurer() {
-        return wiringBuilder -> wiringBuilder.scalar(ExtendedScalars.Currency);
+    public RuntimeWiringConfigurer PositiveFloatConfigurer() {
+        return wiringBuilder -> wiringBuilder.scalar(ExtendedScalars.PositiveFloat);
     }
 
     @Bean

@@ -17,16 +17,15 @@ public class GlobalExceptionHandler {
     Map<String, Object> extMap = new HashMap<>();
 
     @GraphQlExceptionHandler
-    public GraphQLError handle(@NonNull AccountNotFoundException ex, @NonNull DataFetchingEnvironment environment) {
-        extMap.put("errorCode", "ACCOUNT_NOT_FOUND");
-        extMap.put("userMessage", "The account you are trying to access does not exist.");
+    public GraphQLError handle(@NonNull TransactionExistsException ex, @NonNull DataFetchingEnvironment environment) {
+        extMap.put("errorCode", "TXN_ALREADY_EXISTS");
         extMap.put("timestamp", Instant.now().toString());
-        extMap.put("actionableSteps", "Please verify the account ID and try again.");
+        extMap.put("actionableSteps", "Please provide a new txn id and try again.");
 
         return GraphQLError
                 .newError()
                 .errorType(ErrorType.BAD_REQUEST)
-                .message("Sorry, we couldn't find the requested account. Please check the account ID and try again : " + ex.getMessage())
+                .message("Sorry, this txn already exists : " + ex.getMessage())
                 .path(environment.getExecutionStepInfo().getPath())
                 .location(environment.getField().getSourceLocation())
                 .extensions(extMap)

@@ -1,0 +1,105 @@
+scalar DateTime
+scalar PositiveFloat
+scalar Currency
+scalar PositiveInt
+
+type Query {
+    getAccounts: [Account]
+}
+
+type Mutation {
+    addAccount(account: AccountInput!): Boolean
+}
+
+type Account {
+    accountId: ID!
+    accountType: AccountType!
+    accountNumber: String!
+    status: AccountStatus!
+    interestRate: PositiveFloat
+    interestRateType: InterestRateType
+    currency: Currency
+    currentBalance: PositiveFloat!
+    lastActivityDate: DateTime
+}
+
+input AccountInput {
+    accountId: ID!
+    accountType: AccountType!
+    accountNumber: String!
+    status: AccountStatus!
+    interestRate: PositiveFloat
+    interestRateType: InterestRateType
+    currency: Currency
+    lastActivityDate: DateTime
+    currentBalance: PositiveFloat!
+    maturityDate: DateTime
+}
+
+
+type Transaction {
+    transactionId: ID!
+    account: Account!
+    transactionTimestamp: DateTime!
+    description: String!
+    status: TransactionStatus!
+    amount: PositiveFloat!
+    transactionType: TransactionType!
+    payee: String!
+    checkNumber: PositiveInt
+}
+
+input TransactionInput {
+    accountId: ID!
+    transactionId: ID!
+    transactionTimestamp: DateTime!
+    description: String!
+    status: TransactionStatus!
+    amount: PositiveFloat!
+    transactionType: TransactionType!
+    payee: String
+    checkNumber: PositiveInt
+}
+
+
+# Define all enum types here.
+enum AccountType {
+    CD
+    CHECKING
+    CREDITCARD
+    LOAN
+    MORTGAGE
+}
+
+enum AccountStatus {
+    OPEN
+    CLOSED
+    PENDINGOPEN
+    PENDINGCLOSE
+    DELINQUENT
+}
+
+enum InterestRateType {
+    FIXED
+    VARIABLE
+}
+
+enum TransactionStatus {
+    PENDING
+    POSTED
+}
+
+enum TransactionType {
+    CHECK
+    WITHDRAWAL
+    TRANSFER
+    POSDEBIT
+    ATMWITHDRAWAL
+    BILLPAYMENT
+    FEE
+    DEPOSIT
+    ADJUSTMENT
+    INTEREST
+    DIVIDEND
+    DIRECTDEPOSIT
+}

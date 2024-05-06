@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
+/*
 @DgsDataLoader(name = "account")
 public class TransactionAccountDataLoader implements MappedBatchLoader<Integer, Account> {
 
@@ -23,3 +24,4 @@ public class TransactionAccountDataLoader implements MappedBatchLoader<Integer, 
         return CompletableFuture.supplyAsync(() ->  accountService.getAccounts(new ArrayList<>(keys)));
     }
 }
+*/

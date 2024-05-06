@@ -6,38 +6,19 @@ type Query {
     getTransactions : [Transaction]
 }
 
-type Mutation {
-    addTransaction(transaction: TransactionInput!): Boolean
-}
-
-type Account {
-    accountId: ID!  @external
+type Account @key(fields: "accountId") @extends {
+    accountId: ID  @external
 }
 
 type Transaction {
-    transactionId: ID!
-    account: Account!
-    transactionTimestamp: DateTime!
-    description: String!
-    status: TransactionStatus!
-    amount: PositiveFloat!
-    transactionType: TransactionType!
-    payee: String!
-    checkNumber: PositiveInt
+    transactionId: ID
+    account: [Account]
+    transactionTimestamp: DateTime
+    description: String
+    status: TransactionStatus
+    amount: PositiveFloat
+    transactionType: TransactionType
 }
-
-input TransactionInput {
-    accountId: ID!
-    transactionId: ID!
-    transactionTimestamp: DateTime!
-    description: String!
-    status: TransactionStatus!
-    amount: PositiveFloat!
-    transactionType: TransactionType!
-    payee: String
-    checkNumber: PositiveInt
-}
-
 
 # Define all enum types here.
 enum InterestRateType {
@@ -53,14 +34,5 @@ enum TransactionStatus {
 enum TransactionType {
     CHECK
     WITHDRAWAL
-    TRANSFER
-    POSDEBIT
-    ATMWITHDRAWAL
-    BILLPAYMENT
-    FEE
     DEPOSIT
-    ADJUSTMENT
-    INTEREST
-    DIVIDEND
-    DIRECTDEPOSIT
 }

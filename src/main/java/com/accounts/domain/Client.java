@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class Client {
     private String id;
-    private Integer accountId;
+    private String accountId;
     private String firstName;
     private String middleName;
     private String lastName;

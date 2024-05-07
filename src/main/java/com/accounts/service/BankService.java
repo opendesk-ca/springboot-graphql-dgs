@@ -3,49 +3,35 @@ package com.accounts.service;
 import com.accounts.domain.BankAccount;
 import com.accounts.domain.Client;
 import com.accounts.domain.Currency;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
+@Slf4j
 public class BankService {
-
     private static List<BankAccount> bankAccounts = Arrays.asList(
-            new BankAccount(100, "C100", Currency.USD, 1500.00f, "Active"),
-            new BankAccount(100, "C101", Currency.CAD, 3000.00f, "Active"),
-            new BankAccount(102, "C102", Currency.EUR, 2500.00f, "Inactive"),
-            new BankAccount(103, "C103", Currency.USD, 5000.00f, "Active"),
-            new BankAccount(104, "C104", Currency.EUR, 7500.00f, "Active")
+            new BankAccount("A100", "C100", Currency.USD, 106.00f, "A"),
+            new BankAccount("A101", "C200", Currency.CAD, 250.00f, "A"),
+            new BankAccount("A102", "C300", Currency.CAD, 333.00f, "I"),
+            new BankAccount("A103", "C400", Currency.EUR, 4000.00f, "A"),
+            new BankAccount("A104", "C500", Currency.EUR, 4000.00f, "A")
     );
-
     private static List<Client> clients = Arrays.asList(
-            new Client("C100", 100, "John", "T.", "Doe"),
-            new Client("C101", 101, "Emma", "B.", "Smith"),
-            new Client("C102", 102, "James", "R.", "Brown"),
-            new Client("C103", 103, "Olivia", "S.", "Johnson"),
-            new Client("C104", 104, "William", "K.", "Jones")
+            new Client("C100", "A100", "Elena", "Maria", "Gonzalez"),
+            new Client("C200", "A101", "James", "Robert", "Smith"),
+            new Client("C300", "A102", "Aarav", "Kumar", "Patel"),
+            new Client("C400", "A103", "Linh", "Thi", "Nguyen"),
+            new Client("C500", "A104", "Olivia", "Grace", "Johnson")
     );
 
-    public List<BankAccount> accounts() {
+    public List<BankAccount> getAccounts() {
         return bankAccounts;
     }
 
-    public Map<Integer, Client> getClients (List<Integer> accountIds) {
-        Map<Integer, Client> accountToClients = new HashMap<>();
-
-        for (Integer accountId : accountIds) {
-
-            // Search for clients with the matching account ID and add them to the list
-            for (Client client : clients) {
-                if (client.getAccountId().intValue() == accountId.intValue()) {
-                    accountToClients.put(accountId, client);
-                }
-            }
-        }
-
-        return accountToClients;
+    public Client getClientByAccountId (String accountId) {
+        return clients.stream().filter(c->c.getAccountId().equals(accountId)).findFirst().orElse(null);
     }
 }

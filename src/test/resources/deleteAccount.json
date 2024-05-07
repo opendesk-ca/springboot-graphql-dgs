@@ -1,3 +1,0 @@
-mutation{
-  deleteAccount(accountID:1)
-}

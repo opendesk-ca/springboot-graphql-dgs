@@ -27,7 +27,7 @@ public class AccountsDataFetcher {
 
     @DgsQuery
     public List<BankAccount> accounts()  {
-        System.out.println("Inside accounts");
+        log.info("Getting Accounts");
         return accountsService.accounts();
     }
 
@@ -38,8 +38,8 @@ public class AccountsDataFetcher {
 
         //Because the client field is on BankAccount, the getSource() method will return the Account instance.
         BankAccount account = dfe.getSource();
+        log.info("Get Clients for Account "+ account.getId());
 
-        //Load the reviews from the DataLoader. This call is async and will be batched by the DataLoader mechanism.
         return clientsDataLoader.load(account.getId());
     }
 }

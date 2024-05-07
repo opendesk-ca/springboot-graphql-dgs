@@ -18,12 +18,12 @@ import java.util.List;
 public class Transaction {
 
     private	Integer	                transactionId	;
-    private List<Account> account;
-    private LocalDateTime transactionTimestamp;
+    private List<Integer>           accountId;
+    private LocalDateTime           transactionTimestamp;
     private	String	                description	;
     private TransactionStatus       status	;
     private	Float	                amount	;
-    private TransactionType transactionType	;
+    private TransactionType         transactionType	;
 
     public OffsetDateTime getTransactionTimestamp () {
         return DateTimeConverter.toOffsetDateTime(this.transactionTimestamp);

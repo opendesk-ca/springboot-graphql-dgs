@@ -4,14 +4,15 @@ package com.accounts.datafetcher;
 import com.accounts.entity.Account;
 import com.accounts.entity.Transaction;
 import com.accounts.service.TransactionService;
-import com.netflix.graphql.dgs.*;
+import com.netflix.graphql.dgs.DgsComponent;
+import com.netflix.graphql.dgs.DgsData;
+import com.netflix.graphql.dgs.DgsDataFetchingEnvironment;
+import com.netflix.graphql.dgs.DgsQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.graphql.data.method.annotation.QueryMapping;
 
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 
 @DgsComponent
@@ -32,6 +33,8 @@ public class TransactionsDataFetcher {
     public List<Account> getAccount (DgsDataFetchingEnvironment dfe){
         //Because the account field is on Transaction, the getSource() method will return the Transaction instance.
         Transaction transaction = dfe.getSource();
-        return transactionService.getAccounts(transaction.getTransactionId());
+       List<Account> accounts = transaction.getAccountId().stream()
+               .map(a-> new Account(a)).collect(Collectors.toUnmodifiableList());
+        return accounts;
     }
 }

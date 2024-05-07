@@ -4,10 +4,7 @@ package com.accounts.datafetcher;
 import com.accounts.entity.Account;
 import com.accounts.entity.Transaction;
 import com.accounts.service.TransactionService;
-import com.netflix.graphql.dgs.DgsComponent;
-import com.netflix.graphql.dgs.DgsData;
-import com.netflix.graphql.dgs.DgsDataFetchingEnvironment;
-import com.netflix.graphql.dgs.DgsQuery;
+import com.netflix.graphql.dgs.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -36,5 +33,11 @@ public class TransactionsDataFetcher {
        List<Account> accounts = transaction.getAccountId().stream()
                .map(a-> new Account(a)).collect(Collectors.toUnmodifiableList());
         return accounts;
+    }
+
+    @DgsMutation
+    public Boolean addTransaction(@InputArgument ("transaction") Transaction transaction) {
+        transactionService.save(transaction);
+        return true;
     }
 }

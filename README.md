@@ -22,7 +22,7 @@ Enhance your API interactions with well-structured queries and mutations, ensuri
 ### 6. Advanced Data Types with GraphQL Scalars
 Implement GraphQL extended scalars libraries in SpringBoot to manage complex data types more effectively.
 
-### 7. Testing GraphQL Interfaces
+### 7. Testing GraphQL Interfaces.
 Learn to write comprehensive test cases for your GraphQL queries and mutations using the GraphQL tester interface to ensure reliability and performance.
 
 This project is not just about learning; it's about sharing knowledge, contributing to best practices, and fostering a community of like-minded developers who are eager to push the boundaries of what's possible with SpringBoot and GraphQL. Whether you're a beginner or an experienced developer, this project offers valuable insights into the dynamic world of GraphQL APIs and microservices architecture.

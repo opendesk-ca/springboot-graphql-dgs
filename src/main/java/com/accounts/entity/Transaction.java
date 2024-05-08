@@ -18,28 +18,23 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "transactions")
+@Table(name = "transaction")
 public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer transactionId;
 
-    @ElementCollection
-    @CollectionTable(name = "transaction_accounts", joinColumns = @JoinColumn(name = "transaction_id"))
-    @Column(name = "account_id")
-    private List<Integer> accountId;
+    private Integer account;
 
     private LocalDateTime transactionTimestamp;
 
     private String description;
 
-    @Enumerated(EnumType.STRING)
     private TransactionStatus status;
 
     private Float amount;
 
-    @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
     public OffsetDateTime getTransactionTimestamp() {

@@ -1,5 +1,6 @@
 package com.accounts.service;
 
+import com.accounts.domain.TransactionInput;
 import com.accounts.entity.Transaction;
 import com.accounts.repo.TransactionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,12 @@ public class TransactionService {
         return repo.findAll();
     }
 
-    public Boolean save (Transaction transaction) {
-        repo.save(transaction);
+    public Boolean save (Object transaction) {
+//        Transaction entity = Transaction.builder().transactionId(transaction.getTransactionId())
+//                        .transactionType(transaction.getTransactionType())
+//                                .amount(transaction.getAmount())
+//                                        .build();
+//        repo.save(entity);
         return false;
     }
 }

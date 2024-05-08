@@ -6,19 +6,33 @@ type Query {
     getTransactions : [Transaction]
 }
 
+type Mutation {
+    addTransaction(transaction: TransactionInput!): Boolean
+}
+
 type Account @key(fields: "accountId") @extends {
     accountId: ID  @external
 }
 
 type Transaction {
     transactionId: ID
-    account: [Account]
+    account: Account
     transactionTimestamp: DateTime
     description: String
     status: TransactionStatus
     amount: PositiveFloat
     transactionType: TransactionType
 }
+
+input TransactionInput {
+    accountId: ID
+#    transactionTimestamp: DateTime!
+#    description: String!
+#    status: TransactionStatus!
+#    amount: PositiveFloat!
+#    transactionType: TransactionType!
+}
+
 
 # Define all enum types here.
 enum InterestRateType {

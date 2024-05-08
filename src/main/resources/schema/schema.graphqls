@@ -1,13 +1,6 @@
-type Query {
-    accounts: [BankAccount]
-}
-
-type BankAccount {
+type BankAccount @key(fields: "id") @extends {
     id: ID
-    client: Client
-    currency: Currency
-    balance: Float
-    status: String
+    client: [Client]
 }
 
 type Client {
@@ -15,9 +8,4 @@ type Client {
     firstName: String
     middleName: String
     lastName: String
-}
-
-# Supported currencies
-enum Currency {
-    EUR, CAD, USD
 }

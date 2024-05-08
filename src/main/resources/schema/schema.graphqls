@@ -4,17 +4,9 @@ type Query {
 
 type BankAccount {
     id: ID
-    client: Client
     currency: Currency
     balance: Float
     status: String
-}
-
-type Client {
-    id: ID
-    firstName: String
-    middleName: String
-    lastName: String
 }
 
 # Supported currencies

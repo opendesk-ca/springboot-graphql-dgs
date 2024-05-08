@@ -15,7 +15,7 @@ public class BankService {
             new Client("C101", 101, "Emma", "B.", "Smith"),
             new Client("C102", 102, "James", "R.", "Brown"),
             new Client("C103", 103, "Olivia", "S.", "Johnson"),
-            new Client("C104", 104, "William", "K.", "Jones")
+            new Client("C104", 100, "William", "K.", "Jones")
     );
 
     public List<Client> getClients(Integer accountIds) {

@@ -25,7 +25,7 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer transactionId;
 
-    private Integer account;
+    private Integer accountId;
 
     private LocalDateTime transactionTimestamp;
 

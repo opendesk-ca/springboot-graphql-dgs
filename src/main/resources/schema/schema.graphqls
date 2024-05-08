@@ -7,7 +7,7 @@ type Query {
 }
 
 type Mutation {
-    addTransaction(transaction: TransactionInput!): Boolean
+    addTransaction(transaction: TransactionInput): Boolean
 }
 
 type Account @key(fields: "accountId") @extends {
@@ -22,23 +22,24 @@ type Transaction {
     status: TransactionStatus
     amount: PositiveFloat
     transactionType: TransactionType
+    payee: String
+    checkNumber: PositiveInt
 }
 
 input TransactionInput {
     accountId: ID
-#    transactionTimestamp: DateTime!
-#    description: String!
-#    status: TransactionStatus!
-#    amount: PositiveFloat!
-#    transactionType: TransactionType!
+    transactionId: ID
+    transactionTimestamp: DateTime
+    description: String
+    status: TransactionStatus
+    amount: PositiveFloat
+    transactionType: TransactionType
+    payee: String
+    checkNumber: PositiveInt
 }
 
 
 # Define all enum types here.
-enum InterestRateType {
-    FIXED
-    VARIABLE
-}
 
 enum TransactionStatus {
     PENDING
@@ -46,7 +47,6 @@ enum TransactionStatus {
 }
 
 enum TransactionType {
-    CHECK
-    WITHDRAWAL
-    DEPOSIT
+    CREDIT,
+    DEBIT
 }

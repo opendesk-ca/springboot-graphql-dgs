@@ -12,7 +12,6 @@ public class BankService {
 
     private static List<BankAccount> bankAccounts = Arrays.asList(
             new BankAccount(100,  Currency.USD, 1500.00f, "Active"),
-            new BankAccount(100,  Currency.CAD, 3000.00f, "Active"),
             new BankAccount(102,  Currency.EUR, 2500.00f, "Inactive"),
             new BankAccount(103,  Currency.USD, 5000.00f, "Active"),
             new BankAccount(104,  Currency.EUR, 7500.00f, "Active")

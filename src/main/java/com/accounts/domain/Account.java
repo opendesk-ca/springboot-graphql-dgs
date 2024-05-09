@@ -5,7 +5,7 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class BankAccount {
+public class Account {
     private  Integer id;
     private Currency currency;
     private Float balance;

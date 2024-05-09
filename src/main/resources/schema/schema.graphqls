@@ -1,8 +1,8 @@
 type Query {
-    accounts: [BankAccount]
+    accounts: [Account]
 }
 
-type BankAccount   @key(fields: "id") {
+type Account   @key(fields: "id") {
     id: ID
     currency: Currency
     balance: Float

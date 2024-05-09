@@ -1,8 +1,8 @@
 package com.accounts.datafetcher;
 
 
-import com.accounts.domain.BankAccount;
-import com.accounts.service.BankService;
+import com.accounts.domain.Account;
+import com.accounts.service.AccountService;
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsQuery;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +16,10 @@ import java.util.List;
 public class AccountsDataFetcher {
 
     @Autowired
-    BankService accountsService;
+    AccountService accountsService;
 
     @DgsQuery
-    public List<BankAccount> accounts()  {
+    public List<Account> accounts()  {
         log.info("Getting Accounts");
         return accountsService.accounts();
     }

@@ -34,7 +34,7 @@ public class Account {
     @Column
     private Currency currency;
     @Column
-    private LocalDateTime lastActivityDate;
+    private LocalDateTime lastActivityDate = LocalDateTime.now();
 
     public OffsetDateTime getLastActivityDate() {
         return DateTimeConverter.toOffsetDateTime(this.lastActivityDate);

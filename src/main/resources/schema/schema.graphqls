@@ -1,15 +1,44 @@
+scalar DateTime
+scalar PositiveFloat
+
 type Query {
     accounts: [Account]
 }
 
-type Account   @key(fields: "id") {
-    id: ID
-    currency: Currency
-    balance: Float
-    status: String
+type Mutation {
+    addAccount(account: AccountInput!): Boolean
 }
 
-# Supported currencies
+type Account   @key(fields: "id") {
+    accountId: ID
+    accountType: AccountType!
+    accountNumber: String!
+    currency: Currency
+    balance: Float
+    status: AccountStatus
+    lastActivityDate: DateTime
+}
+
+input AccountInput {
+    accountId: ID
+    accountType: AccountType!
+    accountNumber: String!
+    currency: Currency!
+    balance: Float
+    status: AccountStatus!
+    lastActivityDate: DateTime
+}
+
 enum Currency {
     EUR, CAD, USD
+}
+
+enum AccountStatus {
+    OPEN, CLOSED
+}
+
+enum AccountType {
+    CHECKING
+    LOAN
+    MORTGAGE
 }

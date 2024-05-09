@@ -1,7 +1,7 @@
 package com.accounts.datafetcher;
 
 
-import com.accounts.domain.Account;
+import com.accounts.entity.Account;
 import com.accounts.service.AccountService;
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsQuery;

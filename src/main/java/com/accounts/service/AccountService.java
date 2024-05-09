@@ -1,23 +1,39 @@
 package com.accounts.service;
 
-import com.accounts.domain.Account;
-import com.accounts.domain.Currency;
+import com.accounts.entity.Account;
+import com.accounts.exceptions.AccountNotFoundException;
+import com.accounts.repo.AccountRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AccountService {
 
-    private static List<Account> accounts = Arrays.asList(
-            new Account(100,  Currency.USD, 1500.00f, "Active"),
-            new Account(102,  Currency.EUR, 2500.00f, "Inactive"),
-            new Account(103,  Currency.USD, 5000.00f, "Active"),
-            new Account(104,  Currency.EUR, 7500.00f, "Active")
-    );
+    @Autowired
+    AccountRepo repo;
+
+    public Boolean save(com.accounts.entity.Account account) {
+        if (!repo.findById(account.getAccountId()).isPresent()){
+            repo.save(account);
+            return true;
+        }
+        return false;
+    }
+
 
     public List<Account> accounts() {
-        return accounts;
+        return repo.findAll();
+    }
+
+    public com.accounts.entity.Account accountById(Integer accountId) {
+        Optional<com.accounts.entity.Account> optionalAccount = repo.findById(accountId);
+        if (optionalAccount.isPresent()) {
+            return optionalAccount.get();
+        } else {
+            throw new AccountNotFoundException("Account Not fount " + accountId + " Please Account before adding Transactions");
+        }
     }
 }

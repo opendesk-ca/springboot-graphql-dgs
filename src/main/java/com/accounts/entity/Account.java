@@ -32,6 +32,8 @@ public class Account {
     @Column
     private AccountStatus status;
     @Column
+    private Float balance;
+    @Column
     private Currency currency;
     @Column
     private LocalDateTime lastActivityDate = LocalDateTime.now();

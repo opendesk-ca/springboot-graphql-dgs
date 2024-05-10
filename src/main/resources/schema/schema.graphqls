@@ -1,5 +1,6 @@
 scalar DateTime
 scalar PositiveFloat
+scalar Currency
 
 type Query {
     accounts: [Account]
@@ -13,9 +14,9 @@ type Account   @key(fields: "id") {
     accountId: ID
     accountType: AccountType!
     accountNumber: String!
-    currency: Currency
+    currency: Currency!
     balance: Float
-    status: AccountStatus
+    status: AccountStatus!
     lastActivityDate: DateTime
 }
 
@@ -27,10 +28,6 @@ input AccountInput {
     balance: Float
     status: AccountStatus!
     lastActivityDate: DateTime
-}
-
-enum Currency {
-    EUR, CAD, USD
 }
 
 enum AccountStatus {

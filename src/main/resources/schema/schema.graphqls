@@ -1,11 +1,33 @@
-type BankAccount @key(fields: "id") @extends {
-    id: ID
+scalar CountryCode
+
+type Query {
+    clients : [Client]
+}
+
+type Mutation {
+    addClient (client: ClientInput) : Client
+    deleteClient (id: ID) : Boolean
+}
+
+type Account  @key(fields: "accountId")  @extends {
+    accountId: ID
     client: [Client]
 }
 
 type Client {
-    id: ID
-    firstName: String
+    clientId: ID
+    accountId: ID
+    firstName: String!
     middleName: String
     lastName: String
+    country: CountryCode
+}
+
+input ClientInput{
+    clientId: ID
+    accountId: ID
+    firstName: String!
+    middleName: String
+    lastName: String
+    country: CountryCode
 }

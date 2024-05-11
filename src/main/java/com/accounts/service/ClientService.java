@@ -31,8 +31,11 @@ public class ClientService {
                 .clientId(clientInput.getClientId()).accountId(clientInput.getAccountId()).build();
 
         Client client = Client.builder().clientIdAccountId(clientAccount)
+                .clientId(clientInput.getClientId()).accountId(clientInput.getAccountId())
                 .firstName(clientInput.getFirstName()).lastName(clientInput.getLastName())
                 .middleName(clientInput.getMiddleName()).country(clientInput.getCountry()).build();
-        return repo.save(client);
+         repo.save(client);
+
+         return client;
     }
 }

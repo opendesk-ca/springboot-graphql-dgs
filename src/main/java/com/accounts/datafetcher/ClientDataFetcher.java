@@ -26,6 +26,7 @@ public class ClientDataFetcher {
 
     @DgsMutation
     public Client addClient (@InputArgument ("client") ClientInput client) {
+        log.info("Adding clients...");
         return clientService.save (client);
     }
 

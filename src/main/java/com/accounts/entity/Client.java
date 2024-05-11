@@ -9,12 +9,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Entity
 @Builder
+@Entity
 public class Client {
 
     @EmbeddedId
     private ClientAccountId clientIdAccountId;
+
+    @Transient
+    private Integer clientId;
+    @Transient
+    private Integer accountId;
     private String firstName;
     private String middleName;
     private String lastName;

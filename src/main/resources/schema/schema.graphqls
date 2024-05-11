@@ -16,7 +16,7 @@ type Account  @key(fields: "accountId")  @extends {
 
 type Client {
     clientId: ID
-    accountId: ID
+    accountId: Int
     firstName: String!
     middleName: String
     lastName: String
@@ -25,8 +25,8 @@ type Client {
 
 input ClientInput{
     clientId: ID
-    accountId: ID
-    firstName: String!
+    accountId: Int
+    firstName: String
     middleName: String
     lastName: String
     country: CountryCode

@@ -10,7 +10,7 @@ type Mutation {
     addAccount(account: AccountInput!): Boolean
 }
 
-type Account   @key(fields: "id") {
+type Account   @key(fields: "accountId") {
     accountId: ID
     accountType: AccountType!
     accountNumber: String!

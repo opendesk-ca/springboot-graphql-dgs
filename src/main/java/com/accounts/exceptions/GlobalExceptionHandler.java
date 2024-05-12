@@ -32,4 +32,20 @@ public class GlobalExceptionHandler {
                 .extensions(extMap)
                 .build();
     }
+
+    @GraphQlExceptionHandler
+    public GraphQLError handle(@NonNull AccountAlreadyExistsException ex, @NonNull DataFetchingEnvironment environment) {
+        extMap.put("errorCode", "ACCOUNT_ALREADY_EXITS");
+        extMap.put("timestamp", Instant.now().toString());
+        extMap.put("actionableSteps", "Please verify the account ID and try again.");
+
+        return GraphQLError
+                .newError()
+                .errorType(ErrorType.BAD_REQUEST)
+                .message("The account you are trying to create exists already : " + ex.getMessage())
+                .path(environment.getExecutionStepInfo().getPath())
+                .location(environment.getField().getSourceLocation())
+                .extensions(extMap)
+                .build();
+    }
 }

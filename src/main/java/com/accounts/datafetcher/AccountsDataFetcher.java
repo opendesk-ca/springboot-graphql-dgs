@@ -27,9 +27,15 @@ public class AccountsDataFetcher {
     }
 
     @DgsMutation
-    public Boolean addAccount(@InputArgument("account") Account account) {
+    public Account addAccount(@InputArgument("account") Account account) {
         accountsService.save(account);
-        return true;
+        return account;
+    }
+
+    @DgsMutation
+    public Boolean deleteAccount (@InputArgument("accountId") Integer accountId) {
+        accountsService.deleteAccount (accountId);
+        return Boolean.TRUE;
     }
 
     @DgsEntityFetcher(name = "Account")

@@ -24,7 +24,6 @@ public class AccountService {
         }
     }
 
-
     public List<Account> accounts() {
         return repo.findAll();
     }

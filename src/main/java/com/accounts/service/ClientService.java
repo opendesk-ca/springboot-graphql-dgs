@@ -19,19 +19,11 @@ public class ClientService {
     ClientRepo repo;
 
     public List<Client> getClients() {
-        List<Client> clients = repo.findAll();
-
-        clients = clients.stream().map(c->{
-            c.setClientId(c.getClientIdAccountId().getClientId());
-            c.setAccountId(c.getClientIdAccountId().getAccountId());
-            return c;
-        }).collect(Collectors.toList());
-
-        return clients;
+        return updateClienList (repo.findAll());
     }
 
     public List<Client> getClients(Integer accountId) {
-        return repo.findByClientIdAccountIdAccountId(accountId);
+        return updateClienList (repo.findByClientIdAccountIdAccountId(accountId));
     }
 
     public Client save(ClientInput clientInput) {
@@ -64,5 +56,13 @@ public class ClientService {
         }else{
             throw new ClientNotFoundException("Client  " + clientId + " not exists for Account " + accountId);
         }
+    }
+
+    private List<Client> updateClienList (List<Client> clientStream) {
+        return clientStream.stream().map(c->{
+            c.setClientId(c.getClientIdAccountId().getClientId());
+            c.setAccountId(c.getClientIdAccountId().getAccountId());
+            return c;
+        }).collect(Collectors.toList());
     }
 }

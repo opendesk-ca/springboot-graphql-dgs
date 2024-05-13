@@ -6,7 +6,7 @@ type Query {
 
 type Mutation {
     addClient (client: ClientInput) : Client
-    deleteClient (id: ID) : Boolean
+    deleteClient (clientId: Int, accountId: Int) : Boolean
 }
 
 type Account  @key(fields: "accountId")  @extends {

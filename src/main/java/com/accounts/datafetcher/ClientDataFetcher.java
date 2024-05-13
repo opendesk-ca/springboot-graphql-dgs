@@ -26,18 +26,25 @@ public class ClientDataFetcher {
 
     @DgsMutation
     public Client addClient (@InputArgument ("client") ClientInput client) {
-        log.info("Adding clients...");
+        log.info("Adding clients.");
         return clientService.save (client);
     }
 
-    @DgsData(parentType = "Account", field = "client")
-    public List<Client> clients (DgsDataFetchingEnvironment dfe){
-        Account account = dfe.getSource();
-
-        log.info("Get Clients for Account ", account.getId());
-
-        return clientService.getClients(account.getId());
+    @DgsMutation
+    public Boolean deleteClient (@InputArgument ("clientId") Integer clientId,
+                                 @InputArgument ("accountId") Integer accountId) {
+        log.info("Deleting clients.");
+        return clientService.delete (clientId, accountId);
     }
+
+//    @DgsData(parentType = "Account", field = "client")
+//    public List<Client> clients (DgsDataFetchingEnvironment dfe){
+//        Account account = dfe.getSource();
+//
+//        log.info("Get Clients for Account ", account.getId());
+//
+//        return clientService.getClients();
+//    }
 
     @DgsEntityFetcher(name = "Account")
     public Account account (Map<String, Object> values) {

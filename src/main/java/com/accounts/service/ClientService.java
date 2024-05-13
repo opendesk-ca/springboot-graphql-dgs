@@ -30,6 +30,10 @@ public class ClientService {
         return clients;
     }
 
+    public List<Client> getClients(Integer accountId) {
+        return repo.findByClientIdAccountIdAccountId(accountId);
+    }
+
     public Client save(ClientInput clientInput) {
         ClientAccountId cIdAId = ClientAccountId.builder()
                 .accountId(clientInput.getAccountId())

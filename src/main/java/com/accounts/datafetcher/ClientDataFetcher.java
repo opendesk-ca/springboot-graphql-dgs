@@ -37,14 +37,15 @@ public class ClientDataFetcher {
         return clientService.delete (clientId, accountId);
     }
 
-//    @DgsData(parentType = "Account", field = "client")
-//    public List<Client> clients (DgsDataFetchingEnvironment dfe){
-//        Account account = dfe.getSource();
-//
-//        log.info("Get Clients for Account ", account.getId());
-//
-//        return clientService.getClients();
-//    }
+    @DgsData(parentType = "Account", field = "client")
+    public List<Client> clients (DgsDataFetchingEnvironment dfe){
+        Account account = dfe.getSource();
+
+        log.info("Get Clients for Account ", account.getAccountId());
+
+        List<Client> clients = clientService.getClients(account.getAccountId());
+        return clients;
+    }
 
     @DgsEntityFetcher(name = "Account")
     public Account account (Map<String, Object> values) {
@@ -54,7 +55,9 @@ public class ClientDataFetcher {
         if (accountId instanceof Number) {
             return new Account(((Number) accountId).intValue(), null);
         } else if (accountId instanceof String) {
-            return new Account(Integer.parseInt((String) accountId), null);
+            Account account = new Account(Integer.parseInt((String) accountId),
+                    clientService.getClients(Integer.parseInt((String) accountId)));
+            return account;
         }else {
             throw new IllegalArgumentException("Object is not a Number");
         }

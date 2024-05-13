@@ -49,7 +49,7 @@ public class ClientDataFetcher {
     @DgsEntityFetcher(name = "Account")
     public Account account (Map<String, Object> values) {
 
-        Object accountId =  values.get("id");
+        Object accountId =  values.get("accountId");
 
         if (accountId instanceof Number) {
             return new Account(((Number) accountId).intValue(), null);

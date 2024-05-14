@@ -1,40 +1,38 @@
-package com.accounts.datafetcher;
-
+package com.accounts.controller;
 
 import com.accounts.entity.Account;
 import com.accounts.service.AccountService;
-import com.netflix.graphql.dgs.DgsComponent;
-import com.netflix.graphql.dgs.DgsMutation;
-import com.netflix.graphql.dgs.DgsQuery;
 import com.netflix.graphql.dgs.InputArgument;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
+@Controller
+@Slf4j
+public class AccountsController {
 
-/*@DgsComponent
-@Slf4j*/
-public class AccountsDataFetcher {
-/*
     @Autowired
     AccountService accountsService;
 
-    @DgsQuery
+    @QueryMapping
     public List<Account> accounts()  {
         log.info("Getting Accounts");
         return accountsService.accounts();
     }
 
-    @DgsMutation
+    @MutationMapping
     public Account addAccount(@InputArgument("account") Account account) {
         accountsService.save(account);
         return account;
     }
 
-    @DgsMutation
+    @MutationMapping
     public Boolean deleteAccount (@InputArgument("accountId") Integer accountId) {
         accountsService.deleteAccount (accountId);
         return Boolean.TRUE;
-    }*/
+    }
 }

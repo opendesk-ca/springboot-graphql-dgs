@@ -1,8 +1,8 @@
 type Query {
-    accounts: [BankAccount]
+    accounts: [Account]
 }
 
-type BankAccount {
+type Account {
     id: ID
     client: Client
     currency: Currency

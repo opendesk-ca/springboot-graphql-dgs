@@ -1,6 +1,6 @@
 package com.accounts.service;
 
-import com.accounts.domain.BankAccount;
+import com.accounts.domain.Account;
 import com.accounts.domain.Client;
 import com.accounts.domain.Currency;
 import org.springframework.stereotype.Service;
@@ -13,12 +13,12 @@ import java.util.Map;
 @Service
 public class BankService {
 
-    private static List<BankAccount> bankAccounts = Arrays.asList(
-            new BankAccount(100, "C100", Currency.USD, 1500.00f, "Active"),
-            new BankAccount(100, "C101", Currency.CAD, 3000.00f, "Active"),
-            new BankAccount(102, "C102", Currency.EUR, 2500.00f, "Inactive"),
-            new BankAccount(103, "C103", Currency.USD, 5000.00f, "Active"),
-            new BankAccount(104, "C104", Currency.EUR, 7500.00f, "Active")
+    private static List<Account> bankAccounts = Arrays.asList(
+            new Account(100, "C100", Currency.USD, 1500.00f, "Active"),
+            new Account(100, "C101", Currency.CAD, 3000.00f, "Active"),
+            new Account(102, "C102", Currency.EUR, 2500.00f, "Inactive"),
+            new Account(103, "C103", Currency.USD, 5000.00f, "Active"),
+            new Account(104, "C104", Currency.EUR, 7500.00f, "Active")
     );
 
     private static List<Client> clients = Arrays.asList(
@@ -29,7 +29,7 @@ public class BankService {
             new Client("C104", 104, "William", "K.", "Jones")
     );
 
-    public List<BankAccount> accounts() {
+    public List<Account> accounts() {
         return bankAccounts;
     }
 

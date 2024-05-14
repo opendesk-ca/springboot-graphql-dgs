@@ -1,1 +1,1 @@
-# SpringBootGrapghQL
+# SpringBootGraphQL

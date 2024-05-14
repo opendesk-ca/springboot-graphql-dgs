@@ -2,8 +2,7 @@ package com.accounts.datafetcher;
 
 
 import com.accounts.dataloader.ClientDataLoader;
-import com.accounts.dataloader.ClientDataLoaderWithContext;
-import com.accounts.domain.BankAccount;
+import com.accounts.domain.Account;
 import com.accounts.domain.Client;
 import com.accounts.service.BankService;
 import com.netflix.graphql.dgs.DgsComponent;
@@ -26,18 +25,18 @@ public class AccountsDataFetcher {
     BankService accountsService;
 
     @DgsQuery
-    public List<BankAccount> accounts()  {
+    public List<Account> accounts()  {
         log.info("Getting Accounts");
         return accountsService.accounts();
     }
 
-    @DgsData(parentType = "BankAccount", field = "client")
+    @DgsData(parentType = "Account", field = "client")
     public CompletableFuture<Client> client (DgsDataFetchingEnvironment dfe){
 
         DataLoader<Integer, Client> clientsDataLoader = dfe.getDataLoader(ClientDataLoader.class);
 
-        //Because the client field is on BankAccount, the getSource() method will return the Account instance.
-        BankAccount account = dfe.getSource();
+        //Because the client field is on Account, the getSource() method will return the Account instance.
+        Account account = dfe.getSource();
         log.info("Get Clients for Account "+ account.getId());
 
         return clientsDataLoader.load(account.getId());

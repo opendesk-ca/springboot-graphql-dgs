@@ -11,11 +11,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "BankAccounts")
+@Table(name = "Account", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"accountId"})
+})
 public class BankAccount {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private  Long id;
+    @Column (  name = "account_id" )
+    private Integer id;
 
     @Column
     private Long clientId;

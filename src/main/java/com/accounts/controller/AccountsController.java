@@ -28,7 +28,7 @@ public class AccountsController {
     }
 
     @QueryMapping
-    BankAccount accountById (@Argument("accountId")  Long accountId){
+    BankAccount accountById (@Argument("accountId")  Integer accountId){
         log.info("Getting Account ");
         return bankService.accountById(accountId);
     }
@@ -53,7 +53,7 @@ public class AccountsController {
     }
 
     @MutationMapping
-    Boolean deleteAccount (@Argument("id") Long accountId) {
+    Boolean deleteAccount (@Argument("id") Integer accountId) {
         log.info("Deleting Account : " + accountId);
         return bankService.delete(accountId);
     }

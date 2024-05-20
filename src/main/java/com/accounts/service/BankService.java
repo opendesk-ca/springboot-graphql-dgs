@@ -49,14 +49,14 @@ public class BankService {
         return repo.findAll();
     }
 
-    public BankAccount accountById(Long accountId) {
+    public BankAccount accountById(Integer accountId) {
         if (repo.findById(accountId).isPresent()) {
             return repo.findById(accountId).get();
         }
         throw new AccountNotFoundException("Account Not Found");
     }
 
-    public Boolean delete(Long accountId) {
+    public Boolean delete(Integer accountId) {
         if (repo.findById(accountId).isPresent()){
             repo.delete(repo.findById(accountId).get());
             return true;

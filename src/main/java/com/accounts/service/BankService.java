@@ -33,14 +33,14 @@ public class BankService {
         if (validClient(account))
             repo.save(account);
         else
-            throw new ClientNotFoundException("Client Not Found");
+            throw new ClientNotFoundException("Client Not Found " + account.getClientId());
     }
 
     public BankAccount modify(BankAccount account) {
         if (validClient(account))
             repo.save(account);
         else
-            throw new ClientNotFoundException("Client Not Found");
+            throw new ClientNotFoundException("Client Not Found " + account.getClientId());
 
         return account;
     }
@@ -53,7 +53,7 @@ public class BankService {
         if (repo.findById(accountId).isPresent()) {
             return repo.findById(accountId).get();
         }
-        throw new AccountNotFoundException("Account Not Found");
+        throw new AccountNotFoundException("Account Not Found  " + accountId);
     }
 
     public Boolean delete(Integer accountId) {

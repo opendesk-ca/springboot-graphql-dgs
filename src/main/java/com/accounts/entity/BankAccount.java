@@ -1,6 +1,5 @@
 package com.accounts.entity;
 
-
 import com.accounts.domain.Currency;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,7 +18,7 @@ import java.time.LocalDateTime;
 })
 public class BankAccount {
     @Id
-    @Column(  name = "account_id" )
+    @Column (  name = "account_id" )
     private Integer id;
 
     @Column

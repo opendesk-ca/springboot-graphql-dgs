@@ -19,7 +19,7 @@ type BankAccountType {
     currency: Currency
     country: CountryCode
     balance: Float
-    status: String 
+    status: String
     transferLimit:  PositiveFloat
     accountCreateDate: String
 }
@@ -38,7 +38,7 @@ input BankAccountInput {
 type ClientType {
     id: ID
     firstName: String
-    middleName: String
+    middleName: String  @deprecated(reason: "Please use firstName and lastName ")
     lastName: String
     country: CountryCode            # accepts ISO Country Codes
 }
@@ -48,7 +48,7 @@ enum Currency {
     #Euro
     EUR,
     # Canadian Dollar
-    CAD,
+    CAD,  @deprecated(reason: "Canadian Dollar (CAD) is not available anymore. Please use USD")
     # United States Dollar
     USD
 }

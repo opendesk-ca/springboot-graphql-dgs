@@ -24,9 +24,9 @@ public class AccountsController {
     BankService bankService;
 
     @QueryMapping
-    List<BankAccount> accounts (){
-        log.info("Getting Accounts ");
-        return bankService.getAccounts();
+    List<BankAccount> accounts (@ContextValue String accountStatus){
+        log.info("Getting Accounts for status : " + accountStatus);
+        return bankService.getAccounts(accountStatus);
     }
 
     @QueryMapping
@@ -65,9 +65,7 @@ public class AccountsController {
         return GraphQLError
                 .newError()
                 .errorType(ErrorType.BAD_REQUEST)
-                .message("Unable to locate the specified client. " +
-                        "Please verify the client details and attempt your request again. : "
-                        + ex.getMessage())
+                .message(ex.getMessage())
                 .path(environment.getExecutionStepInfo().getPath())
                 .location(environment.getField().getSourceLocation())
                 .build();

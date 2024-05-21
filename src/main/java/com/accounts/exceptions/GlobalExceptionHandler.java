@@ -14,7 +14,7 @@ public class GlobalExceptionHandler {
         return GraphQLError
                 .newError()
                 .errorType(ErrorType.BAD_REQUEST)
-                .message("Message from GLOBAL exception handler : " + ex.getMessage())
+                .message(ex.getMessage())
                 .path(environment.getExecutionStepInfo().getPath())
                 .location(environment.getField().getSourceLocation())
                 .build();

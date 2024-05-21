@@ -19,7 +19,7 @@ type BankAccountType {
     currency: Currency
     country: CountryCode
     balance: Float
-    status: String
+    status: String 
     transferLimit:  PositiveFloat
     accountCreateDate: String
 }

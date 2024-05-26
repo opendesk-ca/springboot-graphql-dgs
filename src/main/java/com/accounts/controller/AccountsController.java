@@ -5,6 +5,7 @@ import com.accounts.service.AccountService;
 import com.netflix.graphql.dgs.InputArgument;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
@@ -25,13 +26,13 @@ public class AccountsController {
     }
 
     @MutationMapping
-    public Account addAccount(@InputArgument("account") Account account) {
+    public Account addAccount(@Argument("account") Account account) {
         accountsService.save(account);
         return account;
     }
 
     @MutationMapping
-    public Boolean deleteAccount (@InputArgument("accountId") Integer accountId) {
+    public Boolean deleteAccount (@Argument("accountId") Integer accountId) {
         accountsService.deleteAccount (accountId);
         return Boolean.TRUE;
     }

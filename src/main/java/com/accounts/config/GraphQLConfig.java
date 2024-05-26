@@ -12,10 +12,6 @@ public class GraphQLConfig {
         return wiringBuilder -> wiringBuilder.scalar(ExtendedScalars.DateTime);
     }
 
-    @Bean
-    public RuntimeWiringConfigurer CountryCodeConfigurer() {
-        return wiringBuilder -> wiringBuilder.scalar(ExtendedScalars.CountryCode);
-    }
 
     @Bean
     public RuntimeWiringConfigurer PositiveFloatConfigurer() {
@@ -25,10 +21,5 @@ public class GraphQLConfig {
     @Bean
     public RuntimeWiringConfigurer CurrencyConfigurer() {
         return wiringBuilder -> wiringBuilder.scalar(ExtendedScalars.Currency);
-    }
-
-    @Bean
-    public RuntimeWiringConfigurer PositiveIntConfigurer() {
-        return wiringBuilder -> wiringBuilder.scalar(ExtendedScalars.PositiveInt);
     }
 }

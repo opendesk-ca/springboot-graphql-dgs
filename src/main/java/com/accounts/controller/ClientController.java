@@ -7,6 +7,7 @@ import com.accounts.service.ClientService;
 import com.netflix.graphql.dgs.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
@@ -29,14 +30,14 @@ public class ClientController {
     }
 
     @MutationMapping
-    public Client addClient (@InputArgument("client") ClientInput client) {
+    public Client addClient (@Argument("client") ClientInput client) {
         log.info("Adding clients.");
         return clientService.save (client);
     }
 
     @MutationMapping
-    public Boolean deleteClient (@InputArgument ("clientId") Integer clientId,
-                                 @InputArgument ("accountId") Integer accountId) {
+    public Boolean deleteClient (@Argument ("clientId") Integer clientId,
+                                 @Argument ("accountId") Integer accountId) {
         log.info("Deleting clients.");
         return clientService.delete (clientId, accountId);
     }

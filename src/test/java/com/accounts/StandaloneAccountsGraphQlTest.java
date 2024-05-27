@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ContextConfiguration(classes = SpringBootGraphQLApplication.class)
 
-public class AccountsGraphQlTest {
+public class StandaloneAccountsGraphQlTest {
     @Autowired
     private GraphQlTester graphQlTester;
 

@@ -25,7 +25,7 @@ public class AccountsController {
 
     @SchemaMapping (typeName = "BankAccount", field = "client")
     Client getClient (BankAccount account) {
-        log.info("Getting client for " + account.getId());
-        return bankService.getClientByAccountId(account.getId());
+        log.info("Getting client for " + account.id());
+        return bankService.getClientByAccountId(account.id());
     }
 }

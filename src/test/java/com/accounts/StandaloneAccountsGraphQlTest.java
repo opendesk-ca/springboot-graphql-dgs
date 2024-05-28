@@ -13,13 +13,9 @@ import static graphql.Assert.assertFalse;
 import static graphql.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
-@SpringBootTest
-@AutoConfigureHttpGraphQlTester
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ContextConfiguration(classes = SpringBootGraphQLApplication.class)
-
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class StandaloneAccountsGraphQlTest {
     @Autowired
     private GraphQlTester graphQlTester;

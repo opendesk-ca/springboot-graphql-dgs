@@ -9,7 +9,6 @@ import org.springframework.graphql.data.method.annotation.BatchMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,11 +25,11 @@ public class AccountsController {
     }
 
     /** Get clients with N + 1 problem
-    @SchemaMapping (typeName = "BankAccount", field = "client")
-    Client getClient (BankAccount account) {
-        log.info("Getting client for " + account.getId());
-        return bankService.getClientByAccountId(account.getId());
-    }*/
+     @SchemaMapping (typeName = "BankAccount", field = "client")
+     Client getClient (BankAccount account) {
+     log.info("Getting client for " + account.id());
+     return bankService.getClientByAccountId(account.id());
+     }*/
 
 
     /** Get clients without N + 1 problem **/

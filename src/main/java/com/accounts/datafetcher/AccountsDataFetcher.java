@@ -37,8 +37,8 @@ public class AccountsDataFetcher {
 
         //Because the client field is on Account, the getSource() method will return the Account instance.
         Account account = dfe.getSource();
-        log.info("Get Clients for Account "+ account.getId());
+        log.info("Get Clients for Account "+ account.id());
 
-        return clientsDataLoader.load(account.getId());
+        return clientsDataLoader.load(account.id());
     }
 }

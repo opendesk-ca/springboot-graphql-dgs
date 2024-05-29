@@ -1,14 +1,10 @@
 package com.accounts.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
-@AllArgsConstructor
-@Data
-public class Account {
-    private  Integer id;
-    private String clientId;
-    private Currency currency;
-    private Float balance;
-    private String status;
-}
+public record Account(
+        Integer id,
+        String clientId,
+        Currency currency,
+        Float balance,
+        String status
+) {}

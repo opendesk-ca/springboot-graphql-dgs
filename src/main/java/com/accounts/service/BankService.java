@@ -40,7 +40,7 @@ public class BankService {
 
             // Search for clients with the matching account ID and add them to the list
             for (Client client : clients) {
-                if (client.getAccountId().intValue() == accountId.intValue()) {
+                if (client.accountId().intValue() == accountId.intValue()) {
                     accountToClients.put(accountId, client);
                 }
             }

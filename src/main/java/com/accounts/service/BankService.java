@@ -19,6 +19,6 @@ public class BankService {
     );
 
     public List<Client> getClients(Integer accountIds) {
-        return clients.stream().filter(c->c.getAccountId().equals(accountIds)).collect(Collectors.toList());
+        return clients.stream().filter(c->c.accountId().equals(accountIds)).collect(Collectors.toList());
     }
 }

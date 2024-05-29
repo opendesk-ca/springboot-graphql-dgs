@@ -25,9 +25,9 @@ public class ClientDataFetcher {
     public List<Client> clients (DgsDataFetchingEnvironment dfe){
         BankAccount account = dfe.getSource();
 
-        log.info("Get Clients for Account "+ account.getId());
+        log.info("Get Clients for Account "+ account.id());
 
-        return accountsService.getClients(account.getId());
+        return accountsService.getClients(account.id());
     }
 
     @DgsEntityFetcher(name = "BankAccount")

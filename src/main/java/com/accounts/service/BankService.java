@@ -76,14 +76,14 @@ public class BankService {
 
         // Fetch client for all collected IDs
         List<Client> clients = getClients ().stream()
-                .filter(client -> clientIds.contains(client.getId()))
+                .filter(client -> clientIds.contains(client.id()))
                 .collect(Collectors.toList());
 
         // Map each bank account to its corresponding client
         return clients.stream()
                 .collect(Collectors.toMap(
                         client -> bankAccounts.stream()
-                                .filter(bankAccount -> bankAccount.getClientId().equals(client.getId()))
+                                .filter(bankAccount -> bankAccount.getClientId().equals(client.id()))
                                 .findFirst()
                                 .orElse(null),
                         client -> client
@@ -92,6 +92,6 @@ public class BankService {
 
     private boolean validClient(BankAccount account) {
         return getClients ().stream()
-                .filter(client -> client.getId().equals(account.getClientId())).findAny().isPresent();
+                .filter(client -> client.id().equals(account.getClientId())).findAny().isPresent();
     }
 }

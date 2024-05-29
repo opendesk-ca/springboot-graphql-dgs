@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,30 +18,31 @@ import java.util.stream.Collectors;
 @Slf4j
 public class BankService {
 
-    private static List<Client> clients = Arrays.asList(
-            new Client(100L,  "John", "T.", "Doe"),
+    private static final List<Client> clients = List.of(
+            new Client(100L, "John", "T.", "Doe"),
             new Client(101L, "Emma", "B.", "Smith"),
             new Client(102L, "James", "R.", "Brown"),
             new Client(103L, "Olivia", "S.", "Johnson"),
             new Client(104L, "William", "K.", "Jones")
     );
+
     @Autowired
-    BankAccountRepo repo;
+    private BankAccountRepo repo;
 
     public void save(BankAccount account) {
-        if (validClient(account))
+        if (isValidClient(account)) {
             repo.save(account);
-        else
+        } else {
             throw new ClientNotFoundException("Client Not Found " + account.getClientId());
+        }
     }
 
     public BankAccount modify(BankAccount account) {
-        if (validClient(account))
-            repo.save(account);
-        else
+        if (isValidClient(account)) {
+            return repo.save(account);
+        } else {
             throw new ClientNotFoundException("Client Not Found " + account.getClientId());
-
-        return account;
+        }
     }
 
     public List<BankAccount> getAccounts() {
@@ -50,21 +50,20 @@ public class BankService {
     }
 
     public BankAccount accountById(Integer accountId) {
-        if (repo.findById(accountId).isPresent()) {
-            return repo.findById(accountId).get();
-        }
-        throw new AccountNotFoundException("Account Not Found  " + accountId);
+        return repo.findById(accountId)
+                .orElseThrow(() -> new AccountNotFoundException("Account Not Found " + accountId));
     }
 
     public Boolean delete(Integer accountId) {
-        if (repo.findById(accountId).isPresent()){
-            repo.delete(repo.findById(accountId).get());
-            return true;
-        }
-        return false;
+        return repo.findById(accountId)
+                .map(account -> {
+                    repo.delete(account);
+                    return true;
+                })
+                .orElse(false);
     }
 
-    private List<Client> getClients () {
+    private List<Client> getClients() {
         return clients;
     }
 
@@ -74,24 +73,24 @@ public class BankService {
                 .map(BankAccount::getClientId)
                 .collect(Collectors.toSet());
 
-        // Fetch client for all collected IDs
-        List<Client> clients = getClients ().stream()
-                .filter(client -> clientIds.contains(client.getId()))
-                .collect(Collectors.toList());
+        // Fetch clients for all collected IDs
+        List<Client> relevantClients = getClients().stream()
+                .filter(client -> clientIds.contains(client.id()))
+                .toList();
 
         // Map each bank account to its corresponding client
-        return clients.stream()
+        return bankAccounts.stream()
                 .collect(Collectors.toMap(
-                        client -> bankAccounts.stream()
-                                .filter(bankAccount -> bankAccount.getClientId().equals(client.getId()))
+                        bankAccount -> bankAccount,
+                        bankAccount -> relevantClients.stream()
+                                .filter(client -> client.id().equals(bankAccount.getClientId()))
                                 .findFirst()
-                                .orElse(null),
-                        client -> client
+                                .orElseThrow(() -> new ClientNotFoundException("Client Not Found for Account " + bankAccount.getId()))
                 ));
     }
 
-    private boolean validClient(BankAccount account) {
-        return getClients ().stream()
-                .filter(client -> client.getId().equals(account.getClientId())).findAny().isPresent();
+    private boolean isValidClient(BankAccount account) {
+        return clients.stream()
+                .anyMatch(client -> client.id().equals(account.getClientId()));
     }
 }

@@ -30,7 +30,7 @@ public class BankService {
     public void save(BankAccount account) {
         if (Objects.isNull(account.getId()))  throw new AccountNotFoundException("Invalid Account Id :  " + account.getId());
 
-        if (validClient(account))
+        if (isValidClient(account))
             repo.save(account);
         else
             throw new ClientNotFoundException("Client Not Found " + account.getClientId());
@@ -39,7 +39,7 @@ public class BankService {
     public BankAccount modify(BankAccount account) {
         if (Objects.isNull(account.getId()))  throw new AccountNotFoundException("Invalid Account Id :  " + account.getId());
 
-        if (validClient(account))
+        if (isValidClient(account))
             repo.save(account);
         else
             throw new ClientNotFoundException("Client Not Found " + account.getClientId());
@@ -78,22 +78,22 @@ public class BankService {
 
         // Fetch client for all collected IDs
         List<Client> clients = getClients ().stream()
-                .filter(client -> clientIds.contains(client.getId()))
+                .filter(client -> clientIds.contains(client.id()))
                 .collect(Collectors.toList());
 
         // Map each bank account to its corresponding client
         return clients.stream()
                 .collect(Collectors.toMap(
                         client -> bankAccounts.stream()
-                                .filter(bankAccount -> bankAccount.getClientId().equals(client.getId()))
+                                .filter(bankAccount -> bankAccount.getClientId().equals(client.id()))
                                 .findFirst()
                                 .orElse(null),
                         client -> client
                 ));
     }
 
-    private boolean validClient(BankAccount account) {
-        return getClients ().stream()
-                .filter(client -> client.getId().equals(account.getClientId())).findAny().isPresent();
+    private boolean isValidClient(BankAccount account) {
+        return clients.stream()
+                .anyMatch(client -> client.id().equals(account.getClientId()));
     }
 }

@@ -28,19 +28,19 @@ public class ClientService {
 
     public Client save(ClientInput clientInput) {
         ClientAccountId cIdAId = ClientAccountId.builder()
-                .accountId(clientInput.clientId())
-                .clientId(clientInput.clientId()).build();
+                .accountId(clientInput.getClientId())
+                .clientId(clientInput.getClientId()).build();
 
         Client client = Client.builder().clientIdAccountId(cIdAId)
-                .clientId(clientInput.clientId()).accountId(clientInput.accountId())
-                .firstName(clientInput.firstName()).lastName(clientInput.lastName())
-                .middleName(clientInput.middleName()).country(clientInput.country())
+                .clientId(clientInput.getClientId()).accountId(clientInput.getAccountId())
+                .firstName(clientInput.getFirstName()).lastName(clientInput.getLastName())
+                .middleName(clientInput.getMiddleName()).country(clientInput.getCountry())
                 .build();
 
         if (repo.findByClientIdAccountId(cIdAId).isEmpty()){
             repo.save(client);
         }else{
-            throw new ClientAlreadyExistsException("Client  " + clientInput.clientId() + " Already exists for Account " + clientInput.clientId()) ;
+            throw new ClientAlreadyExistsException("Client  " + clientInput.getClientId() + " Already exists for Account " + clientInput.getClientId()) ;
         }
         return client;
     }

@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS "dgs-accounts".account;
+DROP TABLE IF EXISTS "dgs-accounts".client;
 CREATE TABLE "dgs-accounts".account (
     account_id INTEGER PRIMARY KEY,
     account_type VARCHAR(255),

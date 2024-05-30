@@ -49,9 +49,9 @@ public class ClientController {
     public List<Client> clients (DgsDataFetchingEnvironment dfe){
         Account account = dfe.getSource();
 
-        log.info("Get Clients for Account " + account.getAccountId());
+        log.info("Get Clients for Account " + account.accountId());
 
-        List<Client> clients = clientService.getClients(account.getAccountId());
+        List<Client> clients = clientService.getClients(account.accountId());
         return clients;
     }
 

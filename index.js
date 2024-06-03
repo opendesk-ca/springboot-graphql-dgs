@@ -15,16 +15,33 @@
  */
 
 const { ApolloServer, gql } = require('apollo-server');
-const {ApolloGateway, IntrospectAndCompose} = require('@apollo/gateway')
+const { ApolloGateway, IntrospectAndCompose } = require('@apollo/gateway');
+
+const subgraphs = [
+    { name: 'accounts', url: 'http://localhost:8080/graphql' },
+    // Uncomment and modify as necessary for additional services
+    // { name: 'clients', url: 'http://localhost:8081/graphql' },
+];
 
 const gateway = new ApolloGateway({
     supergraphSdl: new IntrospectAndCompose({
-        subgraphs: [
-            { name: 'shows', url: 'http://localhost:8080/graphql' },
-            { name: 'reviews', url: 'http://localhost:8081/graphql' },
-        ]
+        subgraphs: subgraphs
     })
 });
 
-const server = new ApolloServer({ gateway, subscriptions:false, tracing:true });
-server.listen();
+const server = new ApolloServer({
+    gateway,
+    subscriptions: false,
+    tracing: true
+});
+
+// Define a default port
+const port = process.env.PORT || 4000;
+
+server.listen({ port }).then(({ url }) => {
+    console.log(`🚀 Server ready at ${url}`);
+    console.log(`Subgraphs:`);
+    subgraphs.forEach(subgraph => {
+        console.log(`- ${subgraph.name} at ${subgraph.url}`);
+    });
+});

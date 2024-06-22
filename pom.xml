@@ -11,8 +11,8 @@
 	<groupId>com.accounts.gql</groupId>
 	<artifactId>SpringBootGrapghQL</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>SpringBootGrapghQL</name>
-	<description>Demo project for Spring Boot GrapghQL</description>
+	<name>SpringBootGraphQL-DGS-FED-Account-in-Action</name>
+	<description>Demo project for Spring Boot GraphQL</description>
 
 
 	<properties>

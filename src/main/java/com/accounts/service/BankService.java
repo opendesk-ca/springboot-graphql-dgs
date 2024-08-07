@@ -1,45 +1,52 @@
 package com.accounts.service;
 
-import com.accounts.domain.BankAccount;
-import com.accounts.domain.Client;
-import com.accounts.domain.Currency;
+import com.accounts.domain.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
 public class BankService {
 
-    // Immutable lists for bank accounts and clients
     private static final List<BankAccount> bankAccounts = List.of(
-            new BankAccount("A100", "C100", Currency.USD, 106.00f, "A"),
-            new BankAccount("A101", "C200", Currency.CAD, 250.00f, "A"),
-            new BankAccount("A102", "C300", Currency.CAD, 333.00f, "I"),
-            new BankAccount("A103", "C400", Currency.EUR, 4000.00f, "A"),
-            new BankAccount("A104", "C500", Currency.EUR, 4000.00f, "A")
-    );
-    private static final List<Client> clients = List.of(
-            new Client("C100", "A100", "Elena", "Maria", "Gonzalez"),
-            new Client("C200", "A101", "James", "Robert", "Smith"),
-            new Client("C300", "A102", "Aarav", "Kumar", "Patel"),
-            new Client("C400", "A103", "Linh", "Thi", "Nguyen"),
-            new Client("C500", "A104", "Olivia", "Grace", "Johnson")
+            BankAccount.builder().id("A100").clientId("C100").currency(Currency.USD).balance(106.00f).status("A").build(),
+            BankAccount.builder().id("A101").clientId("C200").currency(Currency.CAD).balance(250.00f).status("A").build(),
+            BankAccount.builder().id("A102").clientId("C300").currency(Currency.CAD).balance(333.00f).status("I").build(),
+            BankAccount.builder().id("A103").clientId("C400").currency(Currency.EUR).balance(4000.00f).status("A").build(),
+            BankAccount.builder().id("A104").clientId("C500").currency(Currency.EUR).balance(4000.00f).status("A").build()
     );
 
-    // Method to get all bank accounts
-    public List<BankAccount> getAccounts() {
-        return bankAccounts;
+    private static final List<CreditAccount> creditAccounts = List.of(
+            CreditAccount.builder().id("CA100").clientId("C100").creditLimit(5000.0f).outstandingBalance(1500.0f).status("Active").build(),
+            CreditAccount.builder().id("CA101").clientId("C200").creditLimit(3000.0f).outstandingBalance(1200.0f).status("Active").build(),
+            CreditAccount.builder().id("CA102").clientId("C300").creditLimit(7000.0f).outstandingBalance(2500.0f).status("Inactive").build(),
+            CreditAccount.builder().id("CA103").clientId("C400").creditLimit(4000.0f).outstandingBalance(1800.0f).status("Active").build(),
+            CreditAccount.builder().id("CA104").clientId("C500").creditLimit(6000.0f).outstandingBalance(2000.0f).status("Active").build()
+    );
+
+    private static final List<Client> clients = List.of(
+            Client.builder().id("C100").firstName("John").middleName("A").lastName("Doe").build(),
+            Client.builder().id("C200").firstName("Jane").middleName("B").lastName("Smith").build(),
+            Client.builder().id("C300").firstName("Alice").middleName("C").lastName("Johnson").build(),
+            Client.builder().id("C400").firstName("Bob").middleName("D").lastName("Brown").build(),
+            Client.builder().id("C500").firstName("Charlie").middleName("E").lastName("Davis").build()
+    );
+
+    public List<Account> getAccounts() {
+        return Stream.concat(bankAccounts.stream(), creditAccounts.stream())
+                .collect(Collectors.toList());
     }
 
-    // Method to get client by account ID
-    public Client getClientByAccountId(String accountId) {
+
+    public Client getClientByAccountId(String clientId) {
+        // Find the client by clientId from the clients list
         return clients.stream()
-                .filter(c -> c.accountId().equals(accountId))
+                .filter(client -> client.getId().equals(clientId))
                 .findFirst()
                 .orElse(null);
     }
 }
-

@@ -5,11 +5,11 @@ import lombok.Data;
 
 @Data
 @Builder
-public class BankAccount implements Account {
+public class CreditAccount implements Account {
     private String id;
     private String clientId;
-    private Currency currency;
-    private float balance;
+    private float creditLimit;
+    private float outstandingBalance;
     private String status;
 
     @Override
@@ -24,12 +24,12 @@ public class BankAccount implements Account {
 
     @Override
     public String getCurrency() {
-        return currency.name();
+        return "N/A"; // CreditAccount may not have a currency field
     }
 
     @Override
     public double getBalance() {
-        return balance;
+        return creditLimit - outstandingBalance; // Balance is calculated as credit limit minus outstanding balance
     }
 
     @Override
@@ -37,3 +37,4 @@ public class BankAccount implements Account {
         return status;
     }
 }
+

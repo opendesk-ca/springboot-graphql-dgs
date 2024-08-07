@@ -1,7 +1,9 @@
 package com.accounts.controller;
 
+import com.accounts.domain.Account;
 import com.accounts.domain.BankAccount;
 import com.accounts.domain.Client;
+import com.accounts.domain.CreditAccount;
 import com.accounts.service.BankService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +20,20 @@ public class AccountsController {
     BankService bankService;
 
     @QueryMapping
-    List<BankAccount> accounts (){
+    List<Account> accounts (){
         log.info("Getting Accounts ");
         return bankService.getAccounts();
     }
 
-    @SchemaMapping (typeName = "BankAccount", field = "client")
-    Client getClient (BankAccount account) {
-        log.info("Getting client for " + account.id());
-        return bankService.getClientByAccountId(account.id());
+    @SchemaMapping(typeName = "BankAccount", field = "client")
+    public Client getClient(BankAccount account) {
+        log.info("Getting client for {}", account.getId());
+        return bankService.getClientByAccountId(account.getClient());
+    }
+
+    @SchemaMapping(typeName = "CreditAccount", field = "client")
+    public Client getClient(CreditAccount account) {
+        log.info("Getting client for %s".formatted(account.getId()));
+        return bankService.getClientByAccountId(account.getClient());
     }
 }

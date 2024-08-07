@@ -1,4 +1,14 @@
 package com.accounts.domain;
 
 
-public record Client(String id, String accountId, String firstName, String middleName, String lastName) {}
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class Client {
+    private String id;
+    private String firstName;
+    private String middleName;
+    private String lastName;
+}

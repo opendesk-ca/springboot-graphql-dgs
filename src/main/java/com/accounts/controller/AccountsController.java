@@ -7,6 +7,7 @@ import com.accounts.domain.CreditAccount;
 import com.accounts.service.BankService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,11 @@ public class AccountsController {
     List<Account> accounts (){
         log.info("Getting Accounts ");
         return bankService.getAccounts();
+    }
+
+    @QueryMapping
+    public Account accountById(@Argument("accountId") String id) {
+        return bankService.getAccountById(id);
     }
 
     @SchemaMapping(typeName = "BankAccount", field = "client")

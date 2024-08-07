@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -48,5 +49,19 @@ public class BankService {
                 .filter(client -> client.getId().equals(clientId))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public Account getAccountById(String accountId) {
+        Optional<BankAccount> bankAccount = bankAccounts.stream()
+                .filter(account -> account.getId().equals(accountId))
+                .findFirst();
+        if (bankAccount.isPresent()) {
+            return bankAccount.get();
+        }
+
+        Optional<CreditAccount> creditAccount = creditAccounts.stream()
+                .filter(account -> account.getId().equals(accountId))
+                .findFirst();
+        return creditAccount.orElse(null);
     }
 }

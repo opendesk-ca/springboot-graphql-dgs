@@ -6,6 +6,7 @@ import com.accounts.domain.Currency;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,21 +14,21 @@ import java.util.List;
 @Slf4j
 public class BankService {
 
-    // Immutable lists for bank accounts and clients
-    private static final List<BankAccount> bankAccounts = List.of(
-            new BankAccount("A100", "C100", Currency.USD, 106.00f, "A"),
-            new BankAccount("A101", "C200", Currency.CAD, 250.00f, "A"),
-            new BankAccount("A102", "C300", Currency.CAD, 333.00f, "I"),
-            new BankAccount("A103", "C400", Currency.EUR, 4000.00f, "A"),
-            new BankAccount("A104", "C500", Currency.EUR, 4000.00f, "A")
-    );
-    private static final List<Client> clients = List.of(
-            new Client("C100", "A100", "Elena", "Maria", "Gonzalez"),
-            new Client("C200", "A101", "James", "Robert", "Smith"),
-            new Client("C300", "A102", "Aarav", "Kumar", "Patel"),
-            new Client("C400", "A103", "Linh", "Thi", "Nguyen"),
-            new Client("C500", "A104", "Olivia", "Grace", "Johnson")
-    );
+    // Mutable lists for bank accounts and clients
+    private final List<BankAccount> bankAccounts = new ArrayList<>(List.of(
+            new BankAccount("A100", new Client("C100", "Elena", "Maria", "Gonzalez"), Currency.USD, 106.00f, "active"),
+            new BankAccount("A101", new Client("C200", "James", "Robert", "Smith"), Currency.CAD, 250.00f, "active"),
+            new BankAccount("A102", new Client("C300", "Aarav", "Kumar", "Patel"), Currency.CAD, 333.00f, "inactive"),
+            new BankAccount("A103", new Client("C400", "Linh", "Thi", "Nguyen"), Currency.EUR, 4000.00f, "active"),
+            new BankAccount("A104", new Client("C500", "Olivia", "Grace", "Johnson"), Currency.EUR, 4000.00f, "active")
+    ));
+    private final List<Client> clients = new ArrayList<>(List.of(
+            new Client("C100", "Elena", "Maria", "Gonzalez"),
+            new Client("C200", "James", "Robert", "Smith"),
+            new Client("C300", "Aarav", "Kumar", "Patel"),
+            new Client("C400", "Linh", "Thi", "Nguyen"),
+            new Client("C500", "Olivia", "Grace", "Johnson")
+    ));
 
     // Method to get all bank accounts
     public List<BankAccount> getAccounts() {
@@ -36,10 +37,16 @@ public class BankService {
 
     // Method to get client by account ID
     public Client getClientByAccountId(String accountId) {
-        return clients.stream()
-                .filter(c -> c.accountId().equals(accountId))
+        return bankAccounts.stream()
+                .filter(account -> account.getId().equals(accountId))
+                .map(BankAccount::getClient)
                 .findFirst()
                 .orElse(null);
     }
-}
 
+    // Method to add a new bank account
+    public BankAccount addAccount(BankAccount account) {
+        bankAccounts.add(account);
+        return account;
+    }
+}

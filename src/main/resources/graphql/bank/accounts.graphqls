@@ -2,6 +2,10 @@ type Query {
     accounts: [BankAccount]
 }
 
+type Mutation {
+    addAccount(account: BankAccountInput): BankAccount
+}
+
 type BankAccount {
     id: ID!
     client: Client!
@@ -11,6 +15,21 @@ type BankAccount {
 }
 
 type Client {
+    id: ID!
+    firstName: String!
+    middleName: String
+    lastName: String
+}
+
+input BankAccountInput {
+    id: ID!
+    client: ClientInput!
+    currency: Currency!
+    balance: Float!
+    status: String!
+}
+
+input ClientInput {
     id: ID!
     firstName: String!
     middleName: String

@@ -1,6 +1,7 @@
 package com.accounts.config;
 
-import com.accounts.service.AddAccountDataFetcher;
+
+import com.accounts.resolver.AddAccountDataFetcher;
 import graphql.schema.idl.TypeRuntimeWiring;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

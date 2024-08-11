@@ -1,6 +1,7 @@
-package com.accounts.service;
+package com.accounts.resolver;
 
 import com.accounts.domain.*;
+import com.accounts.service.BankService;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import org.springframework.stereotype.Component;

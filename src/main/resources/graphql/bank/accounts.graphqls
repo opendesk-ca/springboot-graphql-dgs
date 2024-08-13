@@ -2,6 +2,10 @@ type Query {
     accounts: [BankAccount]
 }
 
+type Mutation {
+    login(username: String!, password: String!): AuthPayload
+}
+
 type BankAccount {
     id: ID!
     client: Client!
@@ -16,6 +20,18 @@ type Client {
     middleName: String
     lastName: String
 }
+
+type AuthPayload {
+    token: String
+    user: User
+}
+
+type User {
+    id: ID!
+    username: String!
+    email: String
+}
+
 
 # Supported currencies
 enum Currency {

@@ -1,90 +1,73 @@
 package com.accounts.config;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
-import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientProvider;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientProviderBuilder;
+import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.DefaultReactiveOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
+import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-
-import org.springframework.security.web.server.csrf.CsrfToken;
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
 import static org.springframework.security.config.Customizer.withDefaults;
-
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-        http.authorizeExchange(exchange -> exchange
+        http
+                .authorizeExchange(exchange -> exchange
                         .pathMatchers("/graphql").authenticated()
                         .anyExchange().permitAll()
                 )
-                .httpBasic(withDefaults())  // Enable HTTP Basic authentication
-                .csrf(csrf -> csrf
-                        .csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse())
-                )
-                .addFilterAt(csrfTokenLoggingFilter(), SecurityWebFiltersOrder.CSRF);
+                .oauth2Login(withDefaults())  // Enable OAuth2 login
+                .csrf(ServerHttpSecurity.CsrfSpec::disable);  // Disable CSRF protection
 
         return http.build();
     }
 
     @Bean
-    public ReactiveUserDetailsService userDetailsService() {
-        UserDetails user = User.withUsername("user")
-                .password(passwordEncoder().encode("password"))
-                .roles("USER")
+    public WebClient webClient(ReactiveOAuth2AuthorizedClientManager authorizedClientManager) {
+        ServerOAuth2AuthorizedClientExchangeFilterFunction oauth2 =
+                new ServerOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
+        return WebClient.builder()
+                .filter(oauth2)
                 .build();
-        return new MapReactiveUserDetailsService(user);
-    }
-
-    /* @Bean
-     public WebFilter csrfTokenLoggingFilter() {
-         return (exchange, chain) -> {
-             Mono<CsrfToken> csrfToken = exchange.getAttributeOrDefault(CsrfToken.class.getName(), Mono.empty());
-             return csrfToken.doOnNext(token -> {
-                 System.out.println("CSRF Token: " + token.getToken()); // Log the CSRF token
-             }).then(chain.filter(exchange));
-         };
-     }*/
-
-    @Bean
-    public WebFilter csrfTokenLoggingFilter() {
-        return new WebFilter() {
-            @Override
-            public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-
-                // Step 1: Retrieve the CSRF token from the exchange attributes.
-                Mono<CsrfToken> csrfTokenMono = exchange.getAttributeOrDefault(CsrfToken.class.getName(), Mono.empty());
-
-                // Step 2: Log the CSRF token if it's present.
-                Mono<Void> loggingMono = csrfTokenMono.doOnNext(csrfToken -> {
-                    if (csrfToken != null) {
-                        String tokenValue = csrfToken.getToken();
-                        System.out.println("CSRF Token: " + tokenValue); // Log the CSRF token
-                    }
-                }).then();
-
-                // Step 3: Continue the filter chain after logging.
-                return loggingMono.then(chain.filter(exchange));
-            }
-        };
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public ReactiveOAuth2AuthorizedClientManager authorizedClientManager(
+            ReactiveClientRegistrationRepository clientRegistrationRepository,
+            ServerOAuth2AuthorizedClientRepository authorizedClientRepository) {
+
+        ReactiveOAuth2AuthorizedClientProvider authorizedClientProvider =
+                ReactiveOAuth2AuthorizedClientProviderBuilder.builder()
+                        .authorizationCode()
+                        .refreshToken()
+                        .clientCredentials()
+                        .password()
+                        .build();
+
+        DefaultReactiveOAuth2AuthorizedClientManager authorizedClientManager =
+                new DefaultReactiveOAuth2AuthorizedClientManager(
+                        clientRegistrationRepository, authorizedClientRepository);
+        authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
+
+        return authorizedClientManager;
     }
 }

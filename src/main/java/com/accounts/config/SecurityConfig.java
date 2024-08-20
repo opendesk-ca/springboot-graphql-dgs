@@ -1,36 +1,46 @@
 package com.accounts.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.ReactiveAuthenticationManager;
-import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
-import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
 
-import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
-import reactor.core.publisher.Mono;
+import static org.springframework.security.config.Customizer.withDefaults;
+
 
 @Configuration
-@EnableWebFluxSecurity
+@EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
+    @Autowired
+    private AuthEntryPointJwt unauthorizedHandler;
+
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http,
-                                                         JwtAuthenticationWebFilter jwtAuthenticationWebFilter) {
-        http
-                .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .authorizeExchange(exchange -> exchange
-                        .pathMatchers("/graphql").authenticated()
-                        .anyExchange().permitAll()
-                )
-                .addFilterAt(jwtAuthenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION); // Add JWT filter
+    SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+
+        http.csrf(csrf -> csrf.disable());
+
+        http.authorizeHttpRequests(authorizeRequests ->
+                authorizeRequests
+                        .requestMatchers("/graphql").permitAll()
+                        .anyRequest().authenticated());
+
+        http.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler));
+
+        // Enable basic HTTP authentication
+        http.httpBasic(withDefaults());
 
         return http.build();
     }
-
-    @Bean
-    public ReactiveAuthenticationManager reactiveAuthenticationManager() {
-        return authentication -> Mono.just(authentication); // Dummy manager for JWT
-    }
 }
-

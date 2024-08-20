@@ -1,9 +1,8 @@
-type Query {
-    accounts: [BankAccount]
-}
+directive @public on FIELD_DEFINITION
 
-type Mutation {
-    login(username: String!, password: String!): AuthPayload
+type Query {
+    login(email: String!, password: String!): AuthPayload @public
+    accounts: [BankAccount]
 }
 
 type BankAccount {

@@ -13,12 +13,17 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.graphql.execution.ErrorType;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -28,16 +33,27 @@ public class AccountsController {
     BankService bankService;
 
     @QueryMapping
-    public List<BankAccount> accounts() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("Getting Accounts for user: " + authentication.getName());
+    public List<BankAccount> accounts(Authentication authentication) {
+        if (authentication == null) {
+            log.warn("Authentication is null");
+            return Collections.emptyList();
+        }
+
+        String username = "Unknown";
+        if (authentication instanceof OAuth2AuthenticationToken) {
+            username = ((OAuth2AuthenticationToken) authentication).getPrincipal().getName();
+        } else if (authentication instanceof JwtAuthenticationToken) {
+            username = ((JwtAuthenticationToken) authentication).getName();
+        }
+
+        log.info("Getting Accounts for user: " + username);
         return bankService.getAccounts();
     }
 
+
     @SchemaMapping(typeName = "BankAccount", field = "client")
-    public Client getClient(BankAccount account) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("Getting client for " + account.id() + " for user: " + authentication.getName());
+    public Client getClient(BankAccount account, @AuthenticationPrincipal OAuth2User principal) {
+        log.info("Getting client for " + account.id() + " for user: " + principal.getName());
         return bankService.getClientByAccountId(account.id());
     }
 

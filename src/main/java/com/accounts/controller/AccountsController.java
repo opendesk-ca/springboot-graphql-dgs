@@ -35,25 +35,26 @@ public class AccountsController {
     @QueryMapping
     public List<BankAccount> accounts(Authentication authentication) {
         if (authentication == null) {
-            log.warn("Authentication is null");
             return Collections.emptyList();
         }
 
-        String username = "Unknown";
-        if (authentication instanceof OAuth2AuthenticationToken) {
-            username = ((OAuth2AuthenticationToken) authentication).getPrincipal().getName();
-        } else if (authentication instanceof JwtAuthenticationToken) {
-            username = ((JwtAuthenticationToken) authentication).getName();
-        }
+        String username = getPrincipalFromAuth(authentication);
 
-        log.info("Getting Accounts for user: " + username);
+        log.info("Getting Accounts for user: {}", username);
         return bankService.getAccounts();
     }
 
 
     @SchemaMapping(typeName = "BankAccount", field = "client")
-    public Client getClient(BankAccount account, @AuthenticationPrincipal OAuth2User principal) {
-        log.info("Getting client for " + account.id() + " for user: " + principal.getName());
+    public Client getClient(BankAccount account, Authentication authentication) {
+        if (authentication == null) {
+            log.warn("Authentication is null");
+            return null;
+        }
+
+        String username = getPrincipalFromAuth(authentication);
+
+        log.info("Getting client for {} for user: {}", account.id(), username);
         return bankService.getClientByAccountId(account.id());
     }
 
@@ -66,5 +67,15 @@ public class AccountsController {
                 .path(environment.getExecutionStepInfo().getPath())
                 .location(environment.getField().getSourceLocation())
                 .build();
+    }
+
+    private static String getPrincipalFromAuth(Authentication authentication) {
+        String username = "Unknown";
+        if (authentication instanceof OAuth2AuthenticationToken) {
+            username = ((OAuth2AuthenticationToken) authentication).getPrincipal().getName();
+        } else if (authentication instanceof JwtAuthenticationToken) {
+            username = ((JwtAuthenticationToken) authentication).getName();
+        }
+        return username;
     }
 }

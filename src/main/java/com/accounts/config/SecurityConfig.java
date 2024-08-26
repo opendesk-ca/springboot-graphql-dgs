@@ -24,7 +24,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
+    private AuthEntryPointBasicAuth unauthorizedHandler;
 
     @Value("${app.user.admin}")
     private String adminUser;

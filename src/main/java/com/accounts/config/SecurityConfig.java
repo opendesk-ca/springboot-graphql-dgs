@@ -1,8 +1,10 @@
 package com.accounts.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -12,36 +14,57 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import static org.springframework.security.config.Customizer.withDefaults;
+
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
+    @Autowired
+    private AuthEntryPointJwt unauthorizedHandler;
+
+    @Value("${app.user.admin}")
+    private String adminUser;
+
+    @Value("${app.user.admin.password}")
+    private String adminPassword;
+
+    @Value("${app.user.user}")
+    private String appUser;
+
+    @Value("${app.user.user.password}")
+    private String appUserPassword;
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests((auth) -> auth
-                        .anyRequest().authenticated()
-                )
-                .httpBasic(Customizer.withDefaults());
+    SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+
+        http.csrf(csrf -> csrf.disable());
+
+        http.authorizeHttpRequests(authorizeRequests ->
+                authorizeRequests
+                        .requestMatchers("/graphql").permitAll()
+                        .anyRequest().authenticated());
+
+        http.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler));
+
+        // Enable basic HTTP authentication
+        http.httpBasic(withDefaults());
 
         return http.build();
     }
 
     @Bean
     public UserDetailsService userDetailsService() {
-        UserDetails user1 = User.withUsername("user")
-                .password(passwordEncoder().encode("password"))
+        UserDetails user1 = User.withUsername(appUser)
+                .password(passwordEncoder().encode(appUserPassword))
                 .roles("USER")
                 .build();
 
-        UserDetails user2 = User.withUsername("admin")
-                .password(passwordEncoder().encode("admin123"))
+        UserDetails user2 = User.withUsername(adminUser)
+                .password(passwordEncoder().encode(adminPassword))
                 .roles("ADMIN")
                 .build();
 

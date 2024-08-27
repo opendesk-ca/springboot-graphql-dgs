@@ -44,7 +44,6 @@ public class AccountsController {
         return bankService.getAccounts();
     }
 
-
     @SchemaMapping(typeName = "BankAccount", field = "client")
     public Client getClient(BankAccount account, Authentication authentication) {
         if (authentication == null) {
@@ -58,6 +57,16 @@ public class AccountsController {
         return bankService.getClientByAccountId(account.id());
     }
 
+    private static String getPrincipalFromAuth(Authentication authentication) {
+        String username = "Unknown";
+        if (authentication instanceof OAuth2AuthenticationToken) {
+            username = ((OAuth2AuthenticationToken) authentication).getPrincipal().getName();
+        } else if (authentication instanceof JwtAuthenticationToken) {
+            username = ((JwtAuthenticationToken) authentication).getName();
+        }
+        return username;
+    }
+
     @GraphQlExceptionHandler
     public GraphQLError handle(@NonNull Exception ex, @NonNull DataFetchingEnvironment environment) {
         return GraphQLError
@@ -67,15 +76,5 @@ public class AccountsController {
                 .path(environment.getExecutionStepInfo().getPath())
                 .location(environment.getField().getSourceLocation())
                 .build();
-    }
-
-    private static String getPrincipalFromAuth(Authentication authentication) {
-        String username = "Unknown";
-        if (authentication instanceof OAuth2AuthenticationToken) {
-            username = ((OAuth2AuthenticationToken) authentication).getPrincipal().getName();
-        } else if (authentication instanceof JwtAuthenticationToken) {
-            username = ((JwtAuthenticationToken) authentication).getName();
-        }
-        return username;
     }
 }

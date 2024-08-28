@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -43,6 +44,9 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable());
 
+        // Add a custom filter to check for the Authorization header
+        http.addFilterBefore(new AuthorizationHeaderFilter(), BasicAuthenticationFilter.class);
+
         http.authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
                         .requestMatchers("/graphql").permitAll()
@@ -50,7 +54,6 @@ public class SecurityConfig {
 
         http.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler));
 
-        // Enable basic HTTP authentication
         http.httpBasic(withDefaults());
 
         return http.build();

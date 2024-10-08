@@ -1,5 +1,7 @@
 package com.accounts.controller;
 
+import com.accounts.config.JwtUtils;
+import com.accounts.domain.AuthPayload;
 import com.accounts.domain.BankAccount;
 import com.accounts.domain.Currency;
 import com.accounts.service.BankService;
@@ -12,10 +14,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class AccountsControllerTest {
@@ -28,6 +31,9 @@ public class AccountsControllerTest {
 
     @Mock
     private BankService bankService;
+
+    @Mock
+    private JwtUtils jwUtils;
 
     @InjectMocks
     private AccountsController accountsController;
@@ -52,5 +58,29 @@ public class AccountsControllerTest {
 
         assertEquals (accounts, accountsMock);
         verify (bankService, times(1)).getAccounts();
+    }
+
+    @Test
+    void testLoginQueryTest () throws NoSuchFieldException, IllegalAccessException {
+        String email = "admin@system.com";
+        String password = "password123";
+        String expectedToken = "valid-jwt-token";
+
+        Field systemUserField = AccountsController.class.getDeclaredField("systemUser");
+        systemUserField.setAccessible(true); // Allow access to private field
+        systemUserField.set(accountsController, email); // Set value
+
+        Field systemPasswordField = AccountsController.class.getDeclaredField("systemPassword");
+        systemPasswordField.setAccessible(true); // Allow access to private field
+        systemPasswordField.set(accountsController, password); // Set value
+
+        when (jwUtils.generateJWTToken()).thenReturn(expectedToken);
+        //Actual call
+
+        AuthPayload payload = accountsController.loginQuery(email, password);
+
+        assertNotNull(payload);
+        assertEquals(payload.getToken(), expectedToken);
+        assertEquals(email, payload.getUser().getEmail());
     }
 }
